@@ -3,18 +3,14 @@ import correctSound from "../audio/audio_correct.mp3";
 import incorrectSound from "../audio/audio_wrong.mp3";
 import typingSound from "../audio/audio_typing-sound.mp3";
 
-export const Game = () => {
+export const Game = (props: { words: any; title: string }) => {
   const [score, setScore] = useState(0);
   const [currentWord, setCurrentWord] = useState("");
   const [userInput, setUserInput] = useState("");
   const [timeLeft, setTimeLeft] = useState(60);
   const [timerRunning, setTimerRunning] = useState(false);
 
-  const words = ["apple", "banana", "orange", "grape", "watermelon"];
-
-  const handleInputChange = (e) => {
-    setUserInput(e.target.value);
-  };
+  const words = props.words;
 
   const checkUserInput = () => {
     if (userInput.toLowerCase() === currentWord.toLowerCase()) {
@@ -84,10 +80,12 @@ export const Game = () => {
     audio.play();
   };
 
+  const title = props.title;
+
   return (
     <div className="flex justify-center items-center h-screen bg-custom-background">
       <div className="w-3/4 h-4/5 text-center p-8 rounded shadow-lg justify-center">
-        <p className="text-4xl font-bold mb-4">タイピングゲーム</p>
+        <p className="text-4xl font-bold mb-4">{title}</p>
         <p className="text-2xl mb-2">スコア: {score}</p>
 
         <div className="flex flex-col items-center space-y-4 ">
