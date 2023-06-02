@@ -5,7 +5,7 @@ export const Game = () => {
   const [currentWord, setCurrentWord] = useState("");
   const [userInput, setUserInput] = useState("");
 
-  const words = ["apple", "banana", "orange", "grape", "watermelon"];
+  const words = ["りんご", "ばなな", "オレンジ", "ぶどう", "すいか"];
 
   const handleInputChange = (e) => {
     setUserInput(e.target.value);
@@ -30,35 +30,23 @@ export const Game = () => {
 
   useEffect(() => {
     if (userInput.length === 0) return;
-
-    const isCorrect = userInput.toLowerCase() === currentWord.toLowerCase();
-    const wordElement = document.getElementById("current-word");
-
-    if (isCorrect) {
-      const coloredWord = currentWord.split("").map((char, index) =>
-        index < userInput.length ? (
-          <span key={index} className="text-green-500">
-            {char}
-          </span>
-        ) : (
-          <span key={index}>{char}</span>
-        )
-      );
-
-      wordElement.innerHTML = coloredWord;
-    } else {
-      wordElement.textContent = currentWord;
-    }
-  }, [userInput, currentWord]);
+  }, [userInput]);
 
   return (
     <div className="flex justify-center items-center h-screen bg-custom-background">
-      <div className="w-3/4 h-4/5 text-center p-8 rounded shadow-lg ">
-        <p className="text-4xl font-bold mb-4">python知識</p>
+      <div className="w-3/4 h-4/5 text-center p-8 rounded shadow-lg bg-white">
+        <p className="text-4xl font-bold mb-4">タイピングゲーム</p>
         <p className="text-2xl mb-8">スコア: {score}</p>
-        <p id="current-word" className="text-6xl font-bold mb-8 tracking-wider">
-          {currentWord}
-        </p>
+        <div className="text-6xl font-bold mb-8 tracking-wider">
+          {currentWord.split("").map((char, index) => (
+            <span
+              key={index}
+              className={index < userInput.length ? "text-green-500" : ""}
+            >
+              {char}
+            </span>
+          ))}
+        </div>
         <input
           type="text"
           value={userInput}
