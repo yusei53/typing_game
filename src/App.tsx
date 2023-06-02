@@ -5,9 +5,11 @@ import "./index.css";
 
 function App() {
   return (
-    <div className="App">
-      <h1 className="text-3xl font-bold underline">タイピングゲーム</h1>
-      <Game />
+    <div className="flex justify-center items-center h-screen bg-gray-200 bg-custom-background">
+      <div className="text-center p-8 bg-white rounded shadow-lg">
+        <h1 className="text-4xl font-bold mb-6">タイピングゲーム</h1>
+        <Game />
+      </div>
     </div>
   );
 }
