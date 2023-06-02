@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import correctSound from "../audio/audio_correct.mp3";
 import incorrectSound from "../audio/audio_wrong.mp3";
+import typingSound from "../audio/audio_typing-sound.mp3";
 
 export const Game = () => {
   const [score, setScore] = useState(0);
@@ -46,6 +47,19 @@ export const Game = () => {
     }
   }, [timeLeft]);
 
+  const handleCharacterInput = (char) => {
+    const currentCharIndex = userInput.length;
+    const currentChar = currentWord[currentCharIndex];
+
+    if (char.toLowerCase() === currentChar.toLowerCase()) {
+      setScore((prevScore) => prevScore + 1);
+      playSound(typingSound);
+    } else {
+      setScore((prevScore) => prevScore - 1);
+      playSound(incorrectSound);
+    }
+  };
+
   const startTimer = () => {
     setTimerRunning(true);
     const timerInterval = setInterval(() => {
@@ -72,33 +86,44 @@ export const Game = () => {
 
   return (
     <div className="flex justify-center items-center h-screen bg-custom-background">
-      <div className="w-3/4 h-4/5 text-center p-8 rounded shadow-lg">
+      <div className="w-3/4 h-4/5 text-center p-8 rounded shadow-lg justify-center">
         <p className="text-4xl font-bold mb-4">タイピングゲーム</p>
-        <p className="text-2xl mb-4">スコア: {score}</p>
+        <p className="text-2xl mb-2">スコア: {score}</p>
 
-        <div className="text-6xl font-bold mb-8 tracking-wider">
-          {currentWord.split("").map((char, index) => (
-            <span
-              key={index}
-              className={
-                index < userInput.length
-                  ? userInput[index].toLowerCase() ===
-                    currentWord[index].toLowerCase()
-                    ? "text-red-500"
-                    : "text-blue-500"
-                  : ""
-              }
-            >
-              {char}
-            </span>
-          ))}
+        <div className="flex flex-col items-center space-y-4 ">
+          <div className="text-6xl font-bold tracking-wider">
+            {currentWord.split("").map((char, index) => (
+              <span
+                key={index}
+                className={
+                  index < userInput.length
+                    ? userInput[index].toLowerCase() ===
+                      currentWord[index].toLowerCase()
+                      ? "text-red-500"
+                      : "text-blue-500"
+                    : ""
+                }
+              >
+                {char}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <div className="">
           <input
             type="text"
             value={userInput}
-            onChange={handleInputChange}
-            onKeyPress={checkUserInput}
+            onChange={(e) => setUserInput(e.target.value)}
+            onKeyPress={(e) => {
+              if (e.key === "Enter") {
+                checkUserInput();
+              } else {
+                handleCharacterInput(e.key);
+              }
+            }}
             autoComplete="off"
-            className="bg-blue-200 border border-black p-2 rounded"
+            className=" mt-20 bg-blue-200 border border-black p-2 rounded w-64"
           />
         </div>
       </div>
