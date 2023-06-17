@@ -13,7 +13,6 @@ export const Game = (props: { title: string }) => {
   const words = [
     { japanese: "メロン", english: "meron" },
     { japanese: "リンゴ", english: "apple" },
-    // 他の単語オブジェクトも追加する
   ];
 
   const checkUserInput = () => {
