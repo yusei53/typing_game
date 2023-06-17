@@ -3,17 +3,21 @@ import correctSound from "../audio/audio_correct.mp3";
 import incorrectSound from "../audio/audio_wrong.mp3";
 import typingSound from "../audio/audio_typing-sound.mp3";
 
-export const Game = (props: { words: any; title: string }) => {
+export const Game = (props: { title: string }) => {
   const [score, setScore] = useState(0);
   const [currentWord, setCurrentWord] = useState("");
   const [userInput, setUserInput] = useState("");
   const [timeLeft, setTimeLeft] = useState(60);
   const [timerRunning, setTimerRunning] = useState(false);
 
-  const words = props.words;
+  const words = [
+    { japanese: "メロン", english: "meron" },
+    { japanese: "リンゴ", english: "apple" },
+    // 他の単語オブジェクトも追加する
+  ];
 
   const checkUserInput = () => {
-    if (userInput.toLowerCase() === currentWord.toLowerCase()) {
+    if (userInput.toLowerCase() === currentWord.english.toLowerCase()) {
       setScore((prevScore) => prevScore + 10);
       setUserInput("");
       generateNewWord();
@@ -43,9 +47,9 @@ export const Game = (props: { words: any; title: string }) => {
     }
   }, [timeLeft]);
 
-  const handleCharacterInput = (char) => {
+  const handleCharacterInput = (char: string) => {
     const currentCharIndex = userInput.length;
-    const currentChar = currentWord[currentCharIndex];
+    const currentChar = currentWord.english[currentCharIndex];
 
     if (char.toLowerCase() === currentChar.toLowerCase()) {
       setScore((prevScore) => prevScore + 1);
@@ -58,21 +62,27 @@ export const Game = (props: { words: any; title: string }) => {
 
   const startTimer = () => {
     setTimerRunning(true);
-    const timerInterval = setInterval(() => {
-      setTimeLeft((prevTime) => prevTime - 1);
-      playSound(timerSound);
+    setTimeLeft(60); // 制限時間を初期化
 
-      if (timeLeft === 1) {
-        clearInterval(timerInterval);
-        setTimerRunning(false);
-        endGame();
-      }
+    const timerInterval = setInterval(() => {
+      setTimeLeft((prevTime) => prevTime - 0.5);
+      playSound(timerSound);
     }, 1000);
+
+    if (timeLeft === 0) {
+      clearInterval(timerInterval);
+      setTimerRunning(false);
+      setTimeLeft(0);
+      endGame();
+    }
   };
 
   const endGame = () => {
     setTimerRunning(false);
-    // ここでゲームの終了処理を追加する（例: 結果画面を表示する、リセットするなど）
+    if (timeLeft <= 0) {
+      // 制限時間が0秒になった場合の処理を追加する
+      // 例: リザルトを表示する、ゲームをリセットする、など
+    }
   };
 
   const playSound = (sound) => {
@@ -84,30 +94,37 @@ export const Game = (props: { words: any; title: string }) => {
 
   return (
     <div className="flex justify-center items-center h-screen bg-custom-background">
-      <div className="w-3/4 h-4/5 text-center p-8 rounded shadow-lg justify-center">
+      <div className="w-3/4 h-4/5 text-center p-8 rounded shadow-lg justify-center text-white">
         <p className="text-4xl font-bold mb-4">{title}</p>
-        <p className="text-2xl mb-2">スコア: {score}</p>
-
-        <div className="flex flex-col items-center space-y-4 ">
-          <div className="text-6xl font-bold tracking-wider">
-            {currentWord.split("").map((char, index) => (
-              <span
-                key={index}
-                className={
-                  index < userInput.length
-                    ? userInput[index].toLowerCase() ===
-                      currentWord[index].toLowerCase()
-                      ? "text-red-500"
-                      : "text-blue-500"
-                    : ""
-                }
-              >
-                {char}
+        <p className="text-2xl mb-2 text-white">スコア: {score}</p>
+        <p className="text-2xl mb-2 text-white">残り時間: {timeLeft}秒</p>{" "}
+        {/* Display remaining time */}
+        <div className="flex flex-col items-center space-y-4">
+          <div className="text-4xl font-bold tracking-wider text-white">
+            {currentWord && currentWord.japanese && (
+              <span className="text-red-500">{currentWord.japanese}</span>
+            )}
+            {currentWord && currentWord.english && (
+              <span>
+                {currentWord.english.split("").map((char, index) => (
+                  <span
+                    key={index}
+                    className={
+                      index < userInput.length
+                        ? userInput[index].toLowerCase() ===
+                          currentWord.english[index].toLowerCase()
+                          ? "text-red-500"
+                          : "text-blue-500"
+                        : ""
+                    }
+                  >
+                    {char}
+                  </span>
+                ))}
               </span>
-            ))}
+            )}
           </div>
         </div>
-
         <div className="">
           <input
             type="text"
@@ -121,7 +138,7 @@ export const Game = (props: { words: any; title: string }) => {
               }
             }}
             autoComplete="off"
-            className=" mt-20 bg-blue-200 border border-black p-2 rounded w-64"
+            className=" mt-20 bg-blue-200 border border-black p-2 rounded w-64 text-black"
           />
         </div>
       </div>
