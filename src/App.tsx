@@ -10,15 +10,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route
-          path="/game"
-          element={
-            <Game
-              title="タイピングゲーム"
-              words={["apple", "banana", "orange", "grape", "watermelon"]}
-            />
-          }
-        />
+        <Route path="/game" element={<Game title="python基礎" />} />
       </Routes>
     </BrowserRouter>
   );
