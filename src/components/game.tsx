@@ -3,6 +3,11 @@ import { useState } from "react";
 export const Game = (props: { title: string }) => {
   const title = props.title;
 
+  const words = [
+    { japanese: "りんご", english: "ringo" },
+    { japanese: "メロン", english: "meron" },
+  ];
+
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(60);
   const [userInput, setUserInput] = useState("");

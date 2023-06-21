@@ -9,7 +9,7 @@ export const Game = (props: { title: string }) => {
   const [userInput, setUserInput] = useState("");
   const [timeLeft, setTimeLeft] = useState(60);
 
-  const words= [
+  const words = [
     { japanese: "メロン", english: "meron" },
     { japanese: "リンゴ", english: "apple" },
   ];
@@ -99,7 +99,7 @@ export const Game = (props: { title: string }) => {
         <div className="flex flex-col items-center space-y-4">
           <div className="text-4xl font-bold tracking-wider text-white">
             {currentWord && currentWord.japanese && (
-              <span className="text-red-500">{currentWord.japanese}</span>
+              <span>{currentWord.japanese}</span>
             )}
             {currentWord && currentWord.english && (
               <span>
