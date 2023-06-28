@@ -11,7 +11,7 @@ export const Game = (props: { title: string }) => {
 
   const words = [
     { japanese: "メロン", english: "meron" },
-    { japanese: "リンゴ", english: "apple" },
+    { japanese: "リンゴ", english: "ringo" },
   ];
 
   const checkUserInput = () => {
@@ -32,7 +32,21 @@ export const Game = (props: { title: string }) => {
 
   useEffect(() => {
     generateNewWord();
-    startTimer();
+    setTimeLeft(60); // 制限時間を初期化
+
+    const timerInterval = setInterval(() => {
+      console.log(timeLeft);
+      setTimeLeft((timeLeft) => timeLeft - 1);
+      playSound(timerSound);
+    }, 1000);
+
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      setTimerRunning(false);
+      setTimeLeft(0);
+      endGame();
+    }
+    return () => clearInterval(timerInterval);
   }, []);
 
   useEffect(() => {
@@ -58,21 +72,21 @@ export const Game = (props: { title: string }) => {
     }
   };
 
-  const startTimer = () => {
-    setTimeLeft(60); // 制限時間を初期化
+  // const startTimer = () => {
+  //   setTimeLeft(60); // 制限時間を初期化
 
-    const timerInterval = setInterval(() => {
-      setTimeLeft((prevTime) => prevTime - 0.5);
-      playSound(timerSound);
-    }, 1000);
+  //   const timerInterval = setInterval(() => {
+  //     setTimeLeft((prevTime) => prevTime - 1);
+  //     playSound(timerSound);
+  //   }, 1000);
 
-    if (timeLeft === 0) {
-      clearInterval(timerInterval);
-      setTimerRunning(false);
-      setTimeLeft(0);
-      endGame();
-    }
-  };
+  //   if (timeLeft === 0) {
+  //     clearInterval(timerInterval);
+  //     setTimerRunning(false);
+  //     setTimeLeft(0);
+  //     endGame();
+  //   }
+  // };
 
   const endGame = () => {
     setTimeLeft(0);
